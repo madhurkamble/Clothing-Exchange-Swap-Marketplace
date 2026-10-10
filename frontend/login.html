@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Clothing Exchange & Swap Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-icon">♻</span>
+        <span>ClothSwap</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="register.html">Sign Up</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Log in to manage your clothing swaps and listings</p>
+      </div>
+
+      <div id="alertBox" class="alert alert-hidden"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            class="form-control" 
+            placeholder="you@example.com" 
+            required 
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-control" 
+            placeholder="••••••••" 
+            required 
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      </form>
+
+      <div class="demo-box">
+        <div class="demo-box-title">
+          <span>⚡</span> Quick Demo Logins
+        </div>
+        <div class="demo-buttons">
+          <button 
+            type="button" 
+            class="btn btn-outline btn-sm btn-block" 
+            onclick="fillDemo('admin@clothswap.com', 'admin123')"
+          >
+            Admin Demo
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-outline btn-sm btn-block" 
+            onclick="fillDemo('user@clothswap.com', 'user123')"
+          >
+            User Demo
+          </button>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        Don't have an account yet? <a href="register.html">Create an Account</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

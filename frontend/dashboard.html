@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Clothing Exchange & Swap Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a href="dashboard.html" class="brand-logo">
+        <span class="brand-icon">♻</span>
+        <span>ClothSwap</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="dashboard.html"><strong>Dashboard</strong></a></li>
+          <li><a href="#" id="browseLink" title="Coming in Day 2">Browse Clothes</a></li>
+          <li><a href="#" id="swapsLink" title="Coming in Day 3">Swap Requests</a></li>
+          <li><button id="logoutBtn" class="btn btn-outline btn-sm">Sign Out</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="flex: 1; padding-top: 1.5rem; padding-bottom: 2.5rem;">
+    <!-- User Profile Header -->
+    <div class="dashboard-header">
+      <div class="user-profile-badge">
+        <img id="userAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Avatar" class="avatar">
+        <div>
+          <h2>Welcome, <span id="welcomeName">User</span>! 👋</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            <span id="userEmail">loading...</span> • 
+            <span id="userLocation">Location</span> • 
+            <span id="userRoleBadge" class="badge badge-user">USER</span>
+          </p>
+        </div>
+      </div>
+      <div>
+        <span style="font-size: 0.88rem; color: var(--text-muted);">Account Status: Active</span>
+      </div>
+    </div>
+
+    <!-- Quick Stats Cards (Foundation for Day 2 & Day 3) -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👕</div>
+        <div class="stat-content">
+          <h4>My Wardrobe Items</h4>
+          <p id="statMyListings">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🔍</div>
+        <div class="stat-content">
+          <h4>Available Marketplace Items</h4>
+          <p id="statMarketplace">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-content">
+          <h4>Pending Swap Requests</h4>
+          <p id="statPendingSwaps">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🤝</div>
+        <div class="stat-content">
+          <h4>Successful Swaps</h4>
+          <p id="statCompletedSwaps">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="quick-actions-card">
+      <h3 style="margin-bottom: 0.5rem; color: #1e293b;">Quick Actions</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Get started by exploring what you can do on the Clothing Exchange & Swap platform:
+      </p>
+      <div class="action-buttons-group">
+        <button class="btn btn-primary" onclick="alert('Day 2 feature: Marketplace listings will be active in Day 2!')">
+          + Add Clothing Item
+        </button>
+        <button class="btn btn-outline" onclick="alert('Day 2 feature: Marketplace browsing will be active in Day 2!')">
+          Browse Available Clothes
+        </button>
+        <button class="btn btn-outline" onclick="alert('Day 3 feature: Swap requests will be active in Day 3!')">
+          View Swap Inquiries
+        </button>
+      </div>
+    </div>
+
+    <!-- How It Works Info Box -->
+    <div class="card" style="background-color: #f0fdf4; border-color: #bbf7d0;">
+      <h4 style="color: #166534; margin-bottom: 0.5rem;">🌿 Sustainable Swap System Rules</h4>
+      <p style="color: #14532d; font-size: 0.92rem; line-height: 1.6;">
+        Every garment exchanged saves water, reduces toxic dye runoff, and prevents wearable clothing from entering landfills. 
+        In this platform, you never need money to refresh your wardrobe: list the clothes you no longer wear, request trades with other local fashion swappers, and confirm swaps in person or by courier.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Day 1 Foundation Active.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

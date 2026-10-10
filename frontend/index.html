@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clothing Exchange & Swap Marketplace | Sustainable Fashion</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-icon">♻</span>
+        <span>ClothSwap</span>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="login.html" class="btn btn-outline btn-sm">Sign In</a></li>
+          <li><a href="register.html" class="btn btn-primary btn-sm">Get Started</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <span class="hero-tagline">🌱 Sustainable Barter Economy</span>
+      <h1>Exchange Clothes, Save the Planet</h1>
+      <p>
+        Tired of unused clothes taking up closet space? Swap directly with nearby fashion enthusiasts without spending any money. Reduce textile waste and refresh your wardrobe sustainably.
+      </p>
+      <div class="hero-actions">
+        <a href="register.html" class="btn btn-primary">Join the Swap Community</a>
+        <a href="login.html" class="btn btn-outline">Member Login</a>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>100% Cash-Free Swaps</h3>
+          <p>Direct peer-to-peer barter. Trade high-quality clothes without pricing friction or monetary commissions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚖️</div>
+          <h3>Fair Value Estimation</h3>
+          <p>Our smart swap balance calculator evaluates brand, condition, and category so every exchange feels balanced.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <h3>Local City Matching</h3>
+          <p>Discover clothes right in your neighborhood or city for convenient, low-carbon handoffs.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Promoting Sustainable Fashion.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script>
+    // If logged in, update navbar buttons to Dashboard
+    if (isAuthenticated()) {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.innerHTML = `
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html" class="btn btn-primary btn-sm">Go to Dashboard</a></li>
+      `;
+    }
+  </script>
+</body>
+</html>
