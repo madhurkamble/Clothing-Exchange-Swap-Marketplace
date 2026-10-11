@@ -9,6 +9,7 @@ dotenv.config();
 const connectDB = require('./config/db');
 const seedDemoUsers = require('./config/seed');
 const authRoutes = require('./routes/authRoutes');
+const clothingRoutes = require('./routes/clothingRoutes');
 
 // Initialize Express app
 const app = express();
@@ -37,6 +38,9 @@ app.get('/api/health', (req, res) => {
 
 // Authentication Routes
 app.use('/api/auth', authRoutes);
+
+// Clothing Marketplace Routes
+app.use('/api/clothing', clothingRoutes);
 
 // Fallback route for index.html
 app.get('/', (req, res) => {

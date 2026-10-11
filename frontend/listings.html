@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Clothing | Clothing Exchange & Swap Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-icon">♻</span>
+        <span>ClothSwap</span>
+      </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="listings.html"><strong>Browse Clothes</strong></a></li>
+          <li><a href="dashboard.html" id="dashLink">Dashboard</a></li>
+          <li id="authActionItem"><a href="login.html" class="btn btn-primary btn-sm">Sign In</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="flex: 1; padding: 2rem 1.5rem 3rem;">
+    <!-- Alert Box -->
+    <div id="alertContainer" class="alert alert-hidden"></div>
+
+    <!-- Page Title & Header Actions -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+      <div>
+        <h1 style="font-size: 2rem; color: #0f172a; margin-bottom: 0.25rem;">Marketplace Wardrobe</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Browse, filter, and discover clothing ready for sustainable swap exchanges.</p>
+      </div>
+      <div>
+        <button id="openCreateModalBtn" class="btn btn-primary">
+          + Add Clothing Listing
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tabAll">All Available Items</button>
+      <button class="tab-btn" id="tabMine">My Wardrobe Items</button>
+    </div>
+
+    <!-- Filter Bar -->
+    <section class="filter-bar">
+      <div class="filter-grid">
+        <div class="filter-field">
+          <label for="searchInput">Search Title or Brand</label>
+          <input type="text" id="searchInput" placeholder="e.g. Nike, Levi's, Jacket...">
+        </div>
+
+        <div class="filter-field">
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter">
+            <option value="All">All Categories</option>
+            <option value="Tops">Tops</option>
+            <option value="Bottoms">Bottoms</option>
+            <option value="Outerwear">Outerwear</option>
+            <option value="Dresses">Dresses</option>
+            <option value="Activewear">Activewear</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="sizeFilter">Size</label>
+          <select id="sizeFilter">
+            <option value="All">All Sizes</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+            <option value="Free Size">Free Size</option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="conditionFilter">Condition</label>
+          <select id="conditionFilter">
+            <option value="All">All Conditions</option>
+            <option value="New with tags">New with tags</option>
+            <option value="Like new">Like new</option>
+            <option value="Gently used">Gently used</option>
+            <option value="Well worn">Well worn</option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="locationFilter">City / Location</label>
+          <input type="text" id="locationFilter" placeholder="e.g. Brooklyn, Manhattan">
+        </div>
+
+        <div>
+          <button id="resetFiltersBtn" class="btn btn-outline" style="width: 100%; white-space: nowrap;">
+            Reset
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Clothing Items Grid -->
+    <div id="clothingGrid" class="clothing-grid">
+      <!-- Populated dynamically via listings.js -->
+    </div>
+  </main>
+
+  <!-- Create Listing Modal -->
+  <div id="createModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Add New Clothing Listing</h3>
+        <button id="closeCreateModalBtn" class="modal-close-btn">&times;</button>
+      </div>
+
+      <form id="createListingForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="itemTitle">Item Title *</label>
+            <input type="text" id="itemTitle" class="form-control" placeholder="e.g. Vintage Leather Bomber Jacket" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="itemBrand">Brand *</label>
+              <input type="text" id="itemBrand" class="form-control" placeholder="e.g. Zara, Levi's, Nike" required>
+            </div>
+
+            <div class="form-group">
+              <label for="itemCategory">Category *</label>
+              <select id="itemCategory" class="form-control" required>
+                <option value="Tops">Tops</option>
+                <option value="Bottoms">Bottoms</option>
+                <option value="Outerwear">Outerwear</option>
+                <option value="Dresses">Dresses</option>
+                <option value="Activewear">Activewear</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="itemSize">Size *</label>
+              <select id="itemSize" class="form-control" required>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+                <option value="Free Size">Free Size</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="itemCondition">Condition *</label>
+              <select id="itemCondition" class="form-control" required>
+                <option value="New with tags">New with tags</option>
+                <option value="Like new">Like new</option>
+                <option value="Gently used" selected>Gently used</option>
+                <option value="Well worn">Well worn</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="itemEstimatedValue">Estimated Swap Value ($) *</label>
+              <input type="number" id="itemEstimatedValue" class="form-control" placeholder="e.g. 45" min="1" required>
+            </div>
+
+            <div class="form-group">
+              <label for="itemLocation">City / Neighborhood *</label>
+              <input type="text" id="itemLocation" class="form-control" placeholder="e.g. Brooklyn, NY" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="itemImage">Image URL (Optional)</label>
+            <input type="url" id="itemImage" class="form-control" placeholder="https://images.unsplash.com/...">
+            <small style="color: var(--text-muted); font-size: 0.8rem;">Leave blank to use a stylish placeholder clothing image.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="itemDescription">Description *</label>
+            <textarea id="itemDescription" class="form-control" rows="3" placeholder="Describe the fit, material, style, and care instructions..." required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancelCreateModalBtn" class="btn btn-outline">Cancel</button>
+          <button type="submit" class="btn btn-primary">List Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Promoting Sustainable Fashion.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/listings.js"></script>
+  <script>
+    // Header Authentication state updater
+    if (isAuthenticated()) {
+      const authItem = document.getElementById('authActionItem');
+      authItem.innerHTML = `<button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button>`;
+    } else {
+      document.getElementById('dashLink').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

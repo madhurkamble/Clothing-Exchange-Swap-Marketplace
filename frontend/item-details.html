@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Details | Clothing Exchange & Swap Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-icon">♻</span>
+        <span>ClothSwap</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="listings.html">Browse Clothes</a></li>
+          <li><a href="dashboard.html" id="dashLink">Dashboard</a></li>
+          <li id="authActionItem"><a href="login.html" class="btn btn-outline btn-sm">Sign In</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="itemDetailsContainer" style="flex: 1; padding: 2rem 1.5rem 3rem;">
+    <!-- Rendered dynamically by item-details.js -->
+    <div style="text-align: center; padding: 4rem;">
+      <p style="color: var(--text-muted); font-size: 1.1rem;">Loading item details...</p>
+    </div>
+  </main>
+
+  <!-- Edit Listing Modal (For Owner) -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>✏️ Edit Clothing Listing</h3>
+        <button id="closeEditModalBtn" class="modal-close-btn">&times;</button>
+      </div>
+
+      <form id="editListingForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editTitle">Item Title *</label>
+            <input type="text" id="editTitle" class="form-control" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editBrand">Brand *</label>
+              <input type="text" id="editBrand" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label for="editCategory">Category *</label>
+              <select id="editCategory" class="form-control" required>
+                <option value="Tops">Tops</option>
+                <option value="Bottoms">Bottoms</option>
+                <option value="Outerwear">Outerwear</option>
+                <option value="Dresses">Dresses</option>
+                <option value="Activewear">Activewear</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editSize">Size *</label>
+              <select id="editSize" class="form-control" required>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+                <option value="Free Size">Free Size</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="editCondition">Condition *</label>
+              <select id="editCondition" class="form-control" required>
+                <option value="New with tags">New with tags</option>
+                <option value="Like new">Like new</option>
+                <option value="Gently used">Gently used</option>
+                <option value="Well worn">Well worn</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editEstimatedValue">Estimated Swap Value ($) *</label>
+              <input type="number" id="editEstimatedValue" class="form-control" min="1" required>
+            </div>
+
+            <div class="form-group">
+              <label for="editStatus">Status *</label>
+              <select id="editStatus" class="form-control" required>
+                <option value="Available">Available</option>
+                <option value="Swap Requested">Swap Requested</option>
+                <option value="Swapped">Swapped</option>
+                <option value="Unavailable">Unavailable</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editLocation">City / Neighborhood *</label>
+            <input type="text" id="editLocation" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="editImage">Image URL</label>
+            <input type="url" id="editImage" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="editDescription">Description *</label>
+            <textarea id="editDescription" class="form-control" rows="3" required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancelEditModalBtn" class="btn btn-outline">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/item-details.js"></script>
+  <script>
+    if (isAuthenticated()) {
+      const authItem = document.getElementById('authActionItem');
+      authItem.innerHTML = `<button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button>`;
+    } else {
+      document.getElementById('dashLink').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

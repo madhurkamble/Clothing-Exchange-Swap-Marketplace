@@ -16,8 +16,8 @@
       <nav>
         <ul class="nav-links">
           <li><a href="dashboard.html"><strong>Dashboard</strong></a></li>
-          <li><a href="#" id="browseLink" title="Coming in Day 2">Browse Clothes</a></li>
-          <li><a href="#" id="swapsLink" title="Coming in Day 3">Swap Requests</a></li>
+          <li><a href="listings.html">Browse Clothes</a></li>
+          <li><a href="#" id="swapsLink" onclick="alert('Day 3 feature: Swap requests management will be active in Day 3!')">Swap Requests</a></li>
           <li><button id="logoutBtn" class="btn btn-outline btn-sm">Sign Out</button></li>
         </ul>
       </nav>
@@ -39,11 +39,11 @@
         </div>
       </div>
       <div>
-        <span style="font-size: 0.88rem; color: var(--text-muted);">Account Status: Active</span>
+        <a href="listings.html" class="btn btn-primary btn-sm">+ List New Item</a>
       </div>
     </div>
 
-    <!-- Quick Stats Cards (Foundation for Day 2 & Day 3) -->
+    <!-- Live Stats Metrics -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon">👕</div>
@@ -56,7 +56,7 @@
       <div class="stat-card">
         <div class="stat-icon">🔍</div>
         <div class="stat-content">
-          <h4>Available Marketplace Items</h4>
+          <h4>Marketplace Available</h4>
           <p id="statMarketplace">0</p>
         </div>
       </div>
@@ -78,20 +78,32 @@
       </div>
     </div>
 
+    <!-- My Recent Wardrobe Listings -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.15rem; color: #0f172a;">My Active Clothing Items</h3>
+        <a href="listings.html" style="font-size: 0.88rem; color: var(--primary-color); font-weight: 600; text-decoration: none;">View All in Marketplace →</a>
+      </div>
+      <div id="recentWardrobeContainer">
+        <!-- Loaded dynamically via dashboard.js -->
+        <p style="color: var(--text-muted);">Loading your wardrobe...</p>
+      </div>
+    </div>
+
     <!-- Quick Actions Card -->
     <div class="quick-actions-card">
-      <h3 style="margin-bottom: 0.5rem; color: #1e293b;">Quick Actions</h3>
+      <h3 style="margin-bottom: 0.5rem; color: #1e293b;">Marketplace Quick Actions</h3>
       <p style="color: var(--text-muted); font-size: 0.95rem;">
-        Get started by exploring what you can do on the Clothing Exchange & Swap platform:
+        Discover and manage sustainable barter fashion swaps across your local community:
       </p>
       <div class="action-buttons-group">
-        <button class="btn btn-primary" onclick="alert('Day 2 feature: Marketplace listings will be active in Day 2!')">
-          + Add Clothing Item
-        </button>
-        <button class="btn btn-outline" onclick="alert('Day 2 feature: Marketplace browsing will be active in Day 2!')">
+        <a href="listings.html" class="btn btn-primary">
           Browse Available Clothes
-        </button>
-        <button class="btn btn-outline" onclick="alert('Day 3 feature: Swap requests will be active in Day 3!')">
+        </a>
+        <a href="listings.html" class="btn btn-outline">
+          + Add New Clothing Listing
+        </a>
+        <button class="btn btn-outline" onclick="alert('Day 3 feature: Incoming and outgoing swap requests will be enabled in Day 3!')">
           View Swap Inquiries
         </button>
       </div>
@@ -109,7 +121,7 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Day 1 Foundation Active.</p>
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Day 2 Active.</p>
     </div>
   </footer>
 
