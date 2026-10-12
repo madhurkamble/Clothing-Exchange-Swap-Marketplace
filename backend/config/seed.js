@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Clothing = require('../models/Clothing');
+const SwapRequest = require('../models/SwapRequest');
 
 const seedDemoUsersAndListings = async () => {
   try {
@@ -163,6 +164,41 @@ const seedDemoUsersAndListings = async () => {
 
       await Clothing.insertMany(demoItems);
       console.log(` Seeded ${demoItems.length} realistic clothing marketplace listings.`);
+    }
+
+    // 5. Seed Initial Demo Swap Requests
+    const swapCount = await SwapRequest.countDocuments();
+    if (swapCount === 0) {
+      const alexItem = await Clothing.findOne({ owner: user._id, title: 'Nike Black Hoodie' });
+      const sophiaItem = await Clothing.findOne({ owner: sophia._id, title: "Levi's Blue Denim Jacket" });
+      const sophiaMerino = await Clothing.findOne({ owner: sophia._id, title: 'Uniqlo Extra Fine Merino Sweater' });
+      const alexZara = await Clothing.findOne({ owner: user._id, title: 'Zara Casual Linen Shirt' });
+
+      if (alexItem && sophiaItem) {
+        // Incoming request for Alex from Sophia
+        await SwapRequest.create({
+          requester: sophia._id,
+          owner: user._id,
+          offeredItem: sophiaItem._id,
+          requestedItem: alexItem._id,
+          message: "Hi Alex! I love your Nike hoodie. Would you be interested in swapping for my Levi's denim trucker jacket? I'm available for a quick meetup near Brooklyn Bridge!",
+          status: 'Pending'
+        });
+      }
+
+      if (sophiaMerino && alexZara) {
+        // Outgoing request from Alex to Sophia
+        await SwapRequest.create({
+          requester: user._id,
+          owner: sophia._id,
+          offeredItem: alexZara._id,
+          requestedItem: sophiaMerino._id,
+          message: "Hey Sophia, saw your Uniqlo merino knit sweater. Offering my brand new Zara linen shirt in exchange!",
+          status: 'Pending'
+        });
+      }
+
+      console.log(' Seeded initial realistic swap requests for demo accounts.');
     }
   } catch (error) {
     console.error('Error seeding demo data:', error.message);

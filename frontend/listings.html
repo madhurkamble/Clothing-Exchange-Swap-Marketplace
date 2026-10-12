@@ -18,6 +18,7 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="listings.html"><strong>Browse Clothes</strong></a></li>
           <li><a href="dashboard.html" id="dashLink">Dashboard</a></li>
+          <li><a href="swap-requests.html" id="swapsLink">Swap Requests</a></li>
           <li id="authActionItem"><a href="login.html" class="btn btn-primary btn-sm">Sign In</a></li>
         </ul>
       </nav>
@@ -222,6 +223,7 @@
       authItem.innerHTML = `<button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button>`;
     } else {
       document.getElementById('dashLink').style.display = 'none';
+      if (document.getElementById('swapsLink')) document.getElementById('swapsLink').style.display = 'none';
     }
   </script>
 </body>

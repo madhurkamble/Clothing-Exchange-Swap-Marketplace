@@ -17,7 +17,7 @@
         <ul class="nav-links">
           <li><a href="dashboard.html"><strong>Dashboard</strong></a></li>
           <li><a href="listings.html">Browse Clothes</a></li>
-          <li><a href="#" id="swapsLink" onclick="alert('Day 3 feature: Swap requests management will be active in Day 3!')">Swap Requests</a></li>
+          <li><a href="swap-requests.html">Swap Requests</a></li>
           <li><button id="logoutBtn" class="btn btn-outline btn-sm">Sign Out</button></li>
         </ul>
       </nav>
@@ -43,12 +43,12 @@
       </div>
     </div>
 
-    <!-- Live Stats Metrics -->
-    <div class="stats-grid">
+    <!-- Live Stats Metrics (5 Comprehensive Counters) -->
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
       <div class="stat-card">
         <div class="stat-icon">👕</div>
         <div class="stat-content">
-          <h4>My Wardrobe Items</h4>
+          <h4>My Wardrobe</h4>
           <p id="statMyListings">0</p>
         </div>
       </div>
@@ -56,36 +56,55 @@
       <div class="stat-card">
         <div class="stat-icon">🔍</div>
         <div class="stat-content">
-          <h4>Marketplace Available</h4>
+          <h4>Marketplace</h4>
           <p id="statMarketplace">0</p>
         </div>
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon">⏳</div>
+        <div class="stat-icon">📥</div>
         <div class="stat-content">
-          <h4>Pending Swap Requests</h4>
-          <p id="statPendingSwaps">0</p>
+          <h4>Incoming Swaps</h4>
+          <p id="statIncomingSwaps">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📤</div>
+        <div class="stat-content">
+          <h4>Outgoing Swaps</h4>
+          <p id="statOutgoingSwaps">0</p>
         </div>
       </div>
 
       <div class="stat-card">
         <div class="stat-icon">🤝</div>
         <div class="stat-content">
-          <h4>Successful Swaps</h4>
+          <h4>Completed Swaps</h4>
           <p id="statCompletedSwaps">0</p>
         </div>
+      </div>
+    </div>
+
+    <!-- Pending Incoming Swap Inquiries Card -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.15rem; color: #0f172a;">Incoming Swap Proposals Awaiting Your Response</h3>
+        <a href="swap-requests.html" style="font-size: 0.88rem; color: var(--primary-color); font-weight: 600; text-decoration: none;">View All Swap Inquiries →</a>
+      </div>
+      <div id="pendingSwapsContainer">
+        <!-- Rendered dynamically via dashboard.js -->
+        <p style="color: var(--text-muted);">Checking swap requests...</p>
       </div>
     </div>
 
     <!-- My Recent Wardrobe Listings -->
     <div class="card" style="margin-bottom: 2rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <h3 style="font-size: 1.15rem; color: #0f172a;">My Active Clothing Items</h3>
+        <h3 style="font-size: 1.15rem; color: #0f172a;">My Active Wardrobe Items</h3>
         <a href="listings.html" style="font-size: 0.88rem; color: var(--primary-color); font-weight: 600; text-decoration: none;">View All in Marketplace →</a>
       </div>
       <div id="recentWardrobeContainer">
-        <!-- Loaded dynamically via dashboard.js -->
         <p style="color: var(--text-muted);">Loading your wardrobe...</p>
       </div>
     </div>
@@ -94,7 +113,7 @@
     <div class="quick-actions-card">
       <h3 style="margin-bottom: 0.5rem; color: #1e293b;">Marketplace Quick Actions</h3>
       <p style="color: var(--text-muted); font-size: 0.95rem;">
-        Discover and manage sustainable barter fashion swaps across your local community:
+        Sustainable barter fashion exchange:
       </p>
       <div class="action-buttons-group">
         <a href="listings.html" class="btn btn-primary">
@@ -103,15 +122,15 @@
         <a href="listings.html" class="btn btn-outline">
           + Add New Clothing Listing
         </a>
-        <button class="btn btn-outline" onclick="alert('Day 3 feature: Incoming and outgoing swap requests will be enabled in Day 3!')">
-          View Swap Inquiries
-        </button>
+        <a href="swap-requests.html" class="btn btn-outline">
+          Manage Swap Inquiries
+        </a>
       </div>
     </div>
 
     <!-- How It Works Info Box -->
     <div class="card" style="background-color: #f0fdf4; border-color: #bbf7d0;">
-      <h4 style="color: #166534; margin-bottom: 0.5rem;">🌿 Sustainable Swap System Rules</h4>
+      <h4 style="color: #166534; margin-bottom: 0.5rem;">🌿 100% Cash-Free Sustainable Fashion Barter</h4>
       <p style="color: #14532d; font-size: 0.92rem; line-height: 1.6;">
         Every garment exchanged saves water, reduces toxic dye runoff, and prevents wearable clothing from entering landfills. 
         In this platform, you never need money to refresh your wardrobe: list the clothes you no longer wear, request trades with other local fashion swappers, and confirm swaps in person or by courier.
@@ -121,7 +140,7 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Day 2 Active.</p>
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Day 3 Active.</p>
     </div>
   </footer>
 

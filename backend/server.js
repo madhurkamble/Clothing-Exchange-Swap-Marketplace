@@ -10,6 +10,7 @@ const connectDB = require('./config/db');
 const seedDemoUsers = require('./config/seed');
 const authRoutes = require('./routes/authRoutes');
 const clothingRoutes = require('./routes/clothingRoutes');
+const swapRoutes = require('./routes/swapRoutes');
 
 // Initialize Express app
 const app = express();
@@ -41,6 +42,9 @@ app.use('/api/auth', authRoutes);
 
 // Clothing Marketplace Routes
 app.use('/api/clothing', clothingRoutes);
+
+// Swap Exchange Routes
+app.use('/api/swaps', swapRoutes);
 
 // Fallback route for index.html
 app.get('/', (req, res) => {

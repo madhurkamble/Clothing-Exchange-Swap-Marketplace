@@ -8,7 +8,7 @@ A 5-Day Sustainable Barter Economy Web Application Development Tracker.
 
 - [x] **Day 1: Project Foundation + Database + Authentication** (Completed)
 - [x] **Day 2: Clothing Listings + Marketplace Browsing + Item Details** (Completed)
-- [ ] **Day 3: Swap Requests + Value Calculator + Location Matching** (Pending)
+- [x] **Day 3: Swap Requests + Value Calculator + Location Matching** (Completed)
 - [ ] **Day 4: Negotiation Chat + Admin Panel + Platform Analytics** (Pending)
 - [ ] **Day 5: Final Testing + UI Polish + Documentation + Deployment** (Pending)
 
@@ -24,60 +24,67 @@ A 5-Day Sustainable Barter Economy Web Application Development Tracker.
 ---
 
 ## Day 2 Status: COMPLETED
+- Created `Clothing` model with validation, categories, sizes, conditions, and owner reference.
+- Built clothing APIs with search, multi-criteria filtering, and ownership authorization.
+- Seeded 8 realistic garments with high-definition imagery.
+- Developed `listings.html` (filters, tabs, cards, create modal) and `item-details.html` (details view, owner edit/delete).
+- Integrated live marketplace counters into `dashboard.html`.
 
-### 1. Data Model & Seeding
-- **Clothing Model (`backend/models/Clothing.js`):**
-  - Fields: `title`, `description`, `category`, `brand`, `size`, `condition`, `estimatedValue`, `image`, `location`, `owner`, `status`, `createdAt`.
-  - Enum validations for categories, standard garment sizes (`XS` to `XXL`), and realistic conditions (`New with tags`, `Like new`, `Gently used`, `Well worn`).
-  - Reference to `User` model for item ownership.
-- **Realistic Dataset Seeded (`backend/config/seed.js`):**
-  - Seeded 8 realistic garments with high-definition fashion imagery:
-    - *Nike Black Hoodie* (Activewear, Size M, Like new, $45)
-    - *Levi's Blue Denim Jacket* (Outerwear, Size L, Gently used, $65)
-    - *Zara Casual Linen Shirt* (Tops, Size M, New with tags, $38)
-    - *Adidas Originals Track Jacket* (Activewear, Size XL, Like new, $50)
-    - *H&M Organic Cotton White T-Shirt* (Tops, Size S, Gently used, $15)
-    - *Puma Running Performance Tee* (Activewear, Size M, Like new, $25)
-    - *Uniqlo Extra Fine Merino Sweater* (Tops, Size L, Like new, $40)
-    - *Patagonia Synchilla Fleece Pullover* (Outerwear, Size M, Gently used, $70)
+---
 
-### 2. Marketplace API Endpoints (`backend/routes/clothingRoutes.js`)
-- `GET /api/clothing` — Browse all listings with query parameters:
-  - `search` (case-insensitive search across title and brand)
-  - `category` (filter by garment category)
-  - `size` (filter by size)
-  - `condition` (filter by condition)
-  - `location` (filter by city or neighborhood)
-  - `owner` (filter by specific owner ID)
-- `GET /api/clothing/my/items` — Protected route returning current user's wardrobe items.
-- `GET /api/clothing/:id` — Fetches complete item details with populated owner profile.
-- `POST /api/clothing` — Protected route to create a new clothing listing.
-- `PUT /api/clothing/:id` — Protected route allowing only the item owner (or admin) to edit details and status.
-- `DELETE /api/clothing/:id` — Protected route allowing only the item owner (or admin) to delete a listing.
+## Day 3 Status: COMPLETED
+
+### 1. Data Models & Business Logic
+- **SwapRequest Model (`backend/models/SwapRequest.js`):**
+  - Fields: `requester`, `owner`, `offeredItem`, `requestedItem`, `message`, `status`, `createdAt`, `updatedAt`.
+  - Status lifecycle: `Pending` → `Accepted` / `Rejected` / `Negotiating` / `Confirmed` → `Completed` / `Cancelled`.
+- **Swap Value Calculator Utility (`backend/utils/swapValueCalculator.js`):**
+  - Evaluates fair trade barter exchange balance.
+  - Considers garment condition weights (`New with tags`, `Like new`, `Gently used`, `Well worn`) and category baseline multipliers.
+  - Categorizes trade balance: `Balanced`, `Slight Difference`, or `Large Difference` with custom barter guidance advice.
+- **Location Matching Engine (`backend/routes/clothingRoutes.js`):**
+  - `GET /api/clothing/nearby/matches` queries other available garments within the same city or metropolitan region.
+
+### 2. Swap Exchange APIs (`backend/routes/swapRoutes.js`)
+- `POST /api/swaps` — Proposes a new swap with strict validation:
+  - Prevents self-swapping (`requester !== owner`).
+  - Verifies ownership of offered garment.
+  - Verifies availability of both items.
+  - Prevents duplicate active swap requests.
+- `GET /api/swaps/incoming` — Fetches incoming requests received by the user.
+- `GET /api/swaps/outgoing` — Fetches outgoing inquiries initiated by the user.
+- `GET /api/swaps/counts` — Live dashboard metrics for incoming, outgoing, and completed trades.
+- `GET /api/swaps/:id` — Fetches complete swap details with populated parties and items.
+- `PUT /api/swaps/:id/accept` — Allows owner to accept a swap offer.
+- `PUT /api/swaps/:id/reject` — Allows owner to decline a swap offer.
+- `PUT /api/swaps/:id/cancel` — Allows requester to cancel an outgoing inquiry.
+- `PUT /api/swaps/:id/status` — Updates status (`Negotiating`, `Confirmed`, `Completed`). When marked `Completed`, automatically updates both garments' status to `Swapped`.
+- `POST /api/swaps/calculate-value` — API endpoint returning value calculation and barter balance analysis.
 
 ### 3. Frontend Pages & Interactions
-- **Marketplace Browsing Page (`frontend/listings.html` & `frontend/js/listings.js`):**
-  - Interactive multi-criteria filter bar (search input, category, size, condition, city location, reset button).
-  - Tab switcher between "All Available Items" and "My Wardrobe Items".
-  - Responsive clothing cards displaying garment imagery, condition badges, estimated value, brand, and location.
-  - Interactive modal dialog for authenticated users to list new clothing items with instant UI update.
-- **Garment Detail View (`frontend/item-details.html` & `frontend/js/item-details.js`):**
-  - Detailed layout displaying full specs, description, swap value card, and owner info.
-  - "Request Swap" trigger (prepared with user feedback for Day 3 integration).
-  - Owner-exclusive controls: "Edit Listing" modal and "Delete Listing" confirmation.
-- **User Dashboard (`frontend/dashboard.html` & `frontend/js/dashboard.js`):**
-  - Live metric counters for "My Wardrobe Items" and "Marketplace Available Items".
-  - Interactive "My Active Clothing Items" preview cards.
+- **Swap Requests Hub (`frontend/swap-requests.html` & `frontend/js/swaps.js`):**
+  - Tab switcher between "Incoming Inquiries" and "Outgoing Inquiries" with live count badges.
+  - Side-by-side trade cards showing offered item ⇄ requested item, stated estimated values, and difference tag.
+  - Location compatibility note (Local Handover vs Courier/Shipping Trade).
+  - One-click actions: Accept, Reject, Cancel, and Mark Completed.
+- **Interactive Swap Proposal Flow (`frontend/item-details.html` & `frontend/js/item-details.js`):**
+  - Clicking "Request Swap" opens an interactive modal with target item preview.
+  - Dropdown of user's own available wardrobe garments.
+  - Real-time client value calculator display showing value comparison, difference, balance badge, and barter advice.
+  - Nearby city matches grid directly beneath item details.
+- **Updated Dashboard (`frontend/dashboard.html` & `frontend/js/dashboard.js`):**
+  - 5 live metric counters: My Wardrobe, Marketplace, Incoming Swaps, Outgoing Swaps, Completed Swaps.
+  - "Incoming Swap Proposals Awaiting Your Response" card on dashboard with direct review action.
 
 ### 4. Verification & Testing
-- Automated test suite verified:
-  - `GET /api/clothing` -> HTTP 200 (Fetched seeded items)
-  - Multi-filtering by search (`Nike`), category (`Outerwear`), condition (`Gently used`), and location (`Brooklyn`) -> All passed
-  - `POST /api/clothing` -> HTTP 201 (Created item)
-  - `GET /api/clothing/:id` -> HTTP 200 (Fetched item details)
-  - `PUT /api/clothing/:id` -> HTTP 200 (Updated item)
-  - `DELETE /api/clothing/:id` -> HTTP 200 (Deleted item)
-  - Static pages (`listings.html`, `item-details.html`, `dashboard.html`) -> HTTP 200
+- Automated test script verified:
+  - Incoming and outgoing swaps fetch -> HTTP 200
+  - Swap Value Calculator API -> HTTP 200 (Balanced / Slight Difference / Large Difference)
+  - Location matching endpoint -> HTTP 200
+  - Self-swapping rejection -> HTTP 400 (Prevented)
+  - Duplicate active swap rejection -> HTTP 400 (Prevented)
+  - Complete swap lifecycle (Create -> Accept -> Complete -> Status marked 'Swapped') -> All passed
+  - Dashboard counts and static pages -> HTTP 200
 
 ---
 
@@ -93,5 +100,5 @@ A 5-Day Sustainable Barter Economy Web Application Development Tracker.
 
 ## Next Planned Day
 
-**Day 3: Swap Requests + Value Calculator + Location Matching**
+**Day 4: Negotiation Chat + Admin Panel + Platform Analytics**
 *(Will begin only after receiving the explicit prompt `NEXT DAY`)*

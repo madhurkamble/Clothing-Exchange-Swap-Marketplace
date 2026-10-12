@@ -18,6 +18,7 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="listings.html">Browse Clothes</a></li>
           <li><a href="dashboard.html" id="dashLink">Dashboard</a></li>
+          <li><a href="swap-requests.html" id="swapsLink">Swap Requests</a></li>
           <li id="authActionItem"><a href="login.html" class="btn btn-outline btn-sm">Sign In</a></li>
         </ul>
       </nav>
@@ -133,6 +134,88 @@
     </div>
   </div>
 
+  <!-- Swap Proposal Modal (Request Swap Flow) -->
+  <div id="swapModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🔄 Propose a Clothing Swap</h3>
+        <button id="closeSwapModalBtn" class="modal-close-btn">&times;</button>
+      </div>
+
+      <form id="swapProposalForm">
+        <div class="modal-body">
+          <!-- Target Item Being Requested -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.25rem;">
+            <span style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">
+              Garment You Wish to Receive:
+            </span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem;">
+              <div>
+                <h4 id="modalTargetTitle" style="color: #0f172a; font-size: 1.05rem;">Garment Title</h4>
+                <p id="modalTargetBrand" style="font-size: 0.85rem; color: var(--text-muted);">Brand (Size)</p>
+              </div>
+              <strong id="modalTargetVal" style="color: var(--primary-color); font-size: 1.15rem;">~$0</strong>
+            </div>
+          </div>
+
+          <!-- Select Wardrobe Item to Offer -->
+          <div class="form-group">
+            <label for="selectOfferedItem">Select an Item From Your Wardrobe to Offer *</label>
+            <select id="selectOfferedItem" class="form-control" required>
+              <option value="">-- Choose an item to offer --</option>
+            </select>
+          </div>
+
+          <!-- Alert if user has no items -->
+          <div id="noItemsAlert" style="display: none; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem;">
+            <p style="color: #991b1b; font-size: 0.88rem; margin-bottom: 0.5rem;">
+              ⚠️ You do not have any available garments in your wardrobe to trade.
+            </p>
+            <a href="listings.html" class="btn btn-primary btn-sm">+ List an Item First</a>
+          </div>
+
+          <!-- Interactive Swap Value Calculator Display -->
+          <div id="swapCalcContainer" style="display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h4 style="color: #166534; font-size: 0.95rem; margin: 0;">⚖️ Swap Value Balance Estimation</h4>
+              <span id="calcBalanceStatus" class="badge badge-user">Balanced</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; text-align: center; background: white; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid #dcfce7; margin-bottom: 0.75rem;">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Your Item</span>
+                <strong id="calcOfferedVal" style="color: #166534; font-size: 1.1rem;">$0</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Target Item</span>
+                <strong id="calcRequestedVal" style="color: #166534; font-size: 1.1rem;">$0</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Difference</span>
+                <strong id="calcDiff" style="color: #0f172a; font-size: 1.1rem;">$0</strong>
+              </div>
+            </div>
+
+            <p id="calcAdvice" style="font-size: 0.85rem; color: #14532d; line-height: 1.4; margin: 0;">
+              Analysis advice notes...
+            </p>
+          </div>
+
+          <!-- Message / Note to Owner -->
+          <div class="form-group">
+            <label for="swapNote">Message to Owner (Optional)</label>
+            <textarea id="swapNote" class="form-control" rows="2" placeholder="e.g. Hi! I'd love to swap for your jacket. Can do an in-person exchange near downtown!"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancelSwapModalBtn" class="btn btn-outline">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Swap Proposal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <footer>
     <div class="container">
       <p>&copy; 2026 Clothing Exchange & Swap Marketplace.</p>
@@ -147,6 +230,7 @@
       authItem.innerHTML = `<button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button>`;
     } else {
       document.getElementById('dashLink').style.display = 'none';
+      if (document.getElementById('swapsLink')) document.getElementById('swapsLink').style.display = 'none';
     }
   </script>
 </body>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swap Requests | Clothing Exchange & Swap Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a href="dashboard.html" class="brand-logo">
+        <span class="brand-icon">♻</span>
+        <span>ClothSwap</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="listings.html">Browse Clothes</a></li>
+          <li><a href="swap-requests.html"><strong>Swap Requests</strong></a></li>
+          <li><button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="flex: 1; padding: 2rem 1.5rem 3rem;">
+    <!-- Page Header -->
+    <div style="margin-bottom: 1.5rem;">
+      <h1 style="font-size: 2rem; color: #0f172a; margin-bottom: 0.25rem;">Clothing Swap Requests</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Manage your incoming barter trade offers and review the status of your outgoing swap inquiries.
+      </p>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tabIncoming">
+        Incoming Inquiries (<span id="countIncoming">0</span>)
+      </button>
+      <button class="tab-btn" id="tabOutgoing">
+        Outgoing Inquiries (<span id="countOutgoing">0</span>)
+      </button>
+    </div>
+
+    <!-- Alert Box -->
+    <div id="alertContainer" class="alert alert-hidden"></div>
+
+    <!-- Swaps List Container -->
+    <div id="swapsContainer">
+      <!-- Populated dynamically via swaps.js -->
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Day 3 Swaps Active.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/swaps.js"></script>
+</body>
+</html>

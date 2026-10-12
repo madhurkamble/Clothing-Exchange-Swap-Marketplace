@@ -94,6 +94,43 @@ router.get('/my/items', protect, async (req, res) => {
   }
 });
 
+// @route   GET /api/clothing/nearby/matches
+// @desc    Get nearby clothing listings matching a specified or local city location
+// @access  Public
+router.get('/nearby/matches', async (req, res) => {
+  try {
+    const { location, excludeId, owner } = req.query;
+    const query = { status: 'Available' };
+
+    if (location && location.trim() !== '') {
+      // Extract city or key identifier from location (e.g., "Brooklyn, NY" -> "Brooklyn")
+      const cityKey = location.split(',')[0].trim();
+      query.location = new RegExp(cityKey, 'i');
+    }
+
+    if (excludeId) {
+      query._id = { $ne: excludeId };
+    }
+
+    if (owner) {
+      query.owner = { $ne: owner };
+    }
+
+    const matches = await Clothing.find(query)
+      .populate('owner', 'name email location profileImage')
+      .limit(6)
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      count: matches.length,
+      data: matches
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // @route   GET /api/clothing/:id
 // @desc    Get single clothing listing by ID
 // @access  Public
