@@ -58,6 +58,11 @@ async function loadUserProfile(token) {
         userRoleBadgeEl.className = `badge badge-${user.role}`;
       }
 
+      if (user.role === 'admin') {
+        const adminNavLink = document.getElementById('adminNavLink');
+        if (adminNavLink) adminNavLink.style.display = 'block';
+      }
+
       if (userAvatarEl && user.profileImage) {
         userAvatarEl.src = user.profileImage;
         userAvatarEl.alt = user.name;

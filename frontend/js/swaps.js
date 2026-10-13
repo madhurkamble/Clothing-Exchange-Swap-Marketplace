@@ -212,7 +212,11 @@ function renderSwaps(swaps, type) {
         </div>
 
         <!-- Action Buttons -->
-        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap;">
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap; align-items: center;">
+          <a href="chat.html?swapId=${swap._id}" class="btn btn-outline btn-sm" style="background: #f8fafc;">
+            💬 Chat & Discuss
+          </a>
+
           ${isIncoming && swap.status === 'Pending' ? `
             <button class="btn btn-outline btn-sm" onclick="rejectSwap('${swap._id}')">
               ✕ Reject
@@ -222,8 +226,8 @@ function renderSwaps(swaps, type) {
             </button>
           ` : ''}
 
-          ${isIncoming && swap.status === 'Accepted' ? `
-            <button class="btn btn-outline btn-sm" onclick="updateSwapStatus('${swap._id}', 'Completed')">
+          ${isIncoming && (swap.status === 'Accepted' || swap.status === 'Negotiating' || swap.status === 'Confirmed') ? `
+            <button class="btn btn-primary btn-sm" onclick="updateSwapStatus('${swap._id}', 'Completed')">
               ★ Mark Completed & Exchanged
             </button>
           ` : ''}
@@ -234,8 +238,8 @@ function renderSwaps(swaps, type) {
             </button>
           ` : ''}
 
-          ${!isIncoming && swap.status === 'Accepted' ? `
-            <button class="btn btn-outline btn-sm" onclick="updateSwapStatus('${swap._id}', 'Completed')">
+          ${!isIncoming && (swap.status === 'Accepted' || swap.status === 'Negotiating' || swap.status === 'Confirmed') ? `
+            <button class="btn btn-primary btn-sm" onclick="updateSwapStatus('${swap._id}', 'Completed')">
               ★ Mark Completed & Exchanged
             </button>
           ` : ''}

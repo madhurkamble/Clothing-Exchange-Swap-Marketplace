@@ -11,6 +11,8 @@ const seedDemoUsers = require('./config/seed');
 const authRoutes = require('./routes/authRoutes');
 const clothingRoutes = require('./routes/clothingRoutes');
 const swapRoutes = require('./routes/swapRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 // Initialize Express app
 const app = express();
@@ -45,6 +47,12 @@ app.use('/api/clothing', clothingRoutes);
 
 // Swap Exchange Routes
 app.use('/api/swaps', swapRoutes);
+
+// Negotiation Chat Routes
+app.use('/api/chat', chatRoutes);
+
+// Admin Management & Analytics Routes
+app.use('/api/admin', adminRoutes);
 
 // Fallback route for index.html
 app.get('/', (req, res) => {

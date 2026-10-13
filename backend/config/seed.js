@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Clothing = require('../models/Clothing');
 const SwapRequest = require('../models/SwapRequest');
+const Message = require('../models/Message');
 
 const seedDemoUsersAndListings = async () => {
   try {
@@ -199,6 +200,31 @@ const seedDemoUsersAndListings = async () => {
       }
 
       console.log(' Seeded initial realistic swap requests for demo accounts.');
+    }
+
+    // 6. Seed Demo Negotiation Chat Messages
+    const messageCount = await Message.countDocuments();
+    if (messageCount === 0) {
+      const activeSwap = await SwapRequest.findOne({ status: { $in: ['Pending', 'Accepted', 'Negotiating'] } });
+      if (activeSwap) {
+        await Message.create([
+          {
+            sender: activeSwap.requester,
+            receiver: activeSwap.owner,
+            swapRequest: activeSwap._id,
+            message: "Hello! Thanks for checking out my swap offer. The denim jacket is clean and in great shape.",
+            timestamp: new Date(Date.now() - 3600000 * 2)
+          },
+          {
+            sender: activeSwap.owner,
+            receiver: activeSwap.requester,
+            swapRequest: activeSwap._id,
+            message: "Hi! The hoodie looks wonderful. Would you be free for an exchange this weekend near DUMBO or Brooklyn Heights?",
+            timestamp: new Date(Date.now() - 3600000)
+          }
+        ]);
+        console.log(' Seeded realistic negotiation chat messages.');
+      }
     }
   } catch (error) {
     console.error('Error seeding demo data:', error.message);

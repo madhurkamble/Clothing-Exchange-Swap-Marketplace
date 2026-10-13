@@ -19,6 +19,7 @@
           <li><a href="listings.html"><strong>Browse Clothes</strong></a></li>
           <li><a href="dashboard.html" id="dashLink">Dashboard</a></li>
           <li><a href="swap-requests.html" id="swapsLink">Swap Requests</a></li>
+          <li id="adminNavLink" style="display: none;"><a href="admin.html" style="color: var(--primary-color); font-weight: 700;">🛡️ Admin Panel</a></li>
           <li id="authActionItem"><a href="login.html" class="btn btn-primary btn-sm">Sign In</a></li>
         </ul>
       </nav>
@@ -221,6 +222,11 @@
     if (isAuthenticated()) {
       const authItem = document.getElementById('authActionItem');
       authItem.innerHTML = `<button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button>`;
+      const user = getUser();
+      if (user && user.role === 'admin') {
+        const link = document.getElementById('adminNavLink');
+        if (link) link.style.display = 'block';
+      }
     } else {
       document.getElementById('dashLink').style.display = 'none';
       if (document.getElementById('swapsLink')) document.getElementById('swapsLink').style.display = 'none';

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard & Analytics | Clothing Exchange & Swap Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      background: white;
+    }
+    .admin-table th, .admin-table td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .admin-table th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+    .table-container {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a href="dashboard.html" class="brand-logo">
+        <span class="brand-icon">🛡️</span>
+        <span>ClothSwap Admin</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="listings.html">Browse Clothes</a></li>
+          <li><a href="swap-requests.html">Swap Requests</a></li>
+          <li><a href="admin.html"><strong>Admin Panel</strong></a></li>
+          <li><button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="flex: 1; padding: 2rem 1.5rem 3rem;">
+    <!-- Admin Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+      <div>
+        <h1 style="font-size: 2rem; color: #0f172a; margin-bottom: 0.25rem;">Administrator Control Center</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Monitor platform growth, supervise sustainable clothing listings, and manage barter activity.</p>
+      </div>
+      <div>
+        <span class="badge badge-admin" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">🛡️ Admin Privileges Active</span>
+      </div>
+    </div>
+
+    <!-- Admin Navigation Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn admin-tab-btn active" data-target="analyticsSection">📊 Platform Analytics</button>
+      <button class="tab-btn admin-tab-btn" data-target="usersSection">👥 Manage Users</button>
+      <button class="tab-btn admin-tab-btn" data-target="clothingSection">👕 Clothing Listings Moderation</button>
+      <button class="tab-btn admin-tab-btn" data-target="swapsSection">🔄 Monitor Swap Activity</button>
+    </div>
+
+    <!-- SECTION 1: ANALYTICS -->
+    <section id="analyticsSection" class="admin-section" style="display: block;">
+      <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 2rem;">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <h4>Total Users</h4>
+            <p id="metricTotalUsers">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">👕</div>
+          <div class="stat-content">
+            <h4>Total Listings</h4>
+            <p id="metricTotalListings">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">✨</div>
+          <div class="stat-content">
+            <h4>Available Clothes</h4>
+            <p id="metricAvailableListings">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🔄</div>
+          <div class="stat-content">
+            <h4>Total Inquiries</h4>
+            <p id="metricTotalSwaps">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🤝</div>
+          <div class="stat-content">
+            <h4>Completed Swaps</h4>
+            <p id="metricCompletedSwaps">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-content">
+            <h4>Success Rate</h4>
+            <p id="metricSuccessRate">0%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Breakdown Card -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1.15rem; color: #0f172a; margin-bottom: 1rem;">Garment Category Distribution</h3>
+        <div id="categoryBreakdown" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.85rem;">
+          <!-- Loaded dynamically -->
+          <p style="color: var(--text-muted);">Loading categories...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: MANAGE USERS -->
+    <section id="usersSection" class="admin-section" style="display: none;">
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Member Name & Location</th>
+              <th>Email Address</th>
+              <th>Platform Role</th>
+              <th>Wardrobe Items</th>
+              <th>Swap Inquiries</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- Loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: MANAGE CLOTHING LISTINGS -->
+    <section id="clothingSection" class="admin-section" style="display: none;">
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Garment Title & Brand</th>
+              <th>Category</th>
+              <th>Est. Value</th>
+              <th>Owner</th>
+              <th>Status</th>
+              <th>Moderation Actions</th>
+            </tr>
+          </thead>
+          <tbody id="listingsTableBody">
+            <!-- Loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 4: MONITOR SWAPS -->
+    <section id="swapsSection" class="admin-section" style="display: none;">
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Requester</th>
+              <th>Target Owner</th>
+              <th>Offered Garment</th>
+              <th>Requested Garment</th>
+              <th>Current Status</th>
+              <th>Date Proposed</th>
+              <th>Inspection</th>
+            </tr>
+          </thead>
+          <tbody id="swapsTableBody">
+            <!-- Loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clothing Exchange & Swap Marketplace. Administrator Oversight Active.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

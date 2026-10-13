@@ -9,7 +9,7 @@ A 5-Day Sustainable Barter Economy Web Application Development Tracker.
 - [x] **Day 1: Project Foundation + Database + Authentication** (Completed)
 - [x] **Day 2: Clothing Listings + Marketplace Browsing + Item Details** (Completed)
 - [x] **Day 3: Swap Requests + Value Calculator + Location Matching** (Completed)
-- [ ] **Day 4: Negotiation Chat + Admin Panel + Platform Analytics** (Pending)
+- [x] **Day 4: Negotiation Chat + Admin Panel + Platform Analytics** (Completed)
 - [ ] **Day 5: Final Testing + UI Polish + Documentation + Deployment** (Pending)
 
 ---
@@ -33,58 +33,55 @@ A 5-Day Sustainable Barter Economy Web Application Development Tracker.
 ---
 
 ## Day 3 Status: COMPLETED
+- Created `SwapRequest` model with complete barter lifecycle statuses.
+- Built `swapValueCalculator.js` estimating trade balance (*Balanced*, *Slight Difference*, *Large Difference*).
+- Created swap APIs (`POST`, `GET /incoming`, `GET /outgoing`, `PUT /accept`, `PUT /reject`, `PUT /cancel`, `PUT /status`).
+- Built `swap-requests.html` with side-by-side trade comparison cards and instant action triggers.
+- Built interactive Swap Proposal Modal with real-time value calculator and local city matches on `item-details.html`.
 
-### 1. Data Models & Business Logic
-- **SwapRequest Model (`backend/models/SwapRequest.js`):**
-  - Fields: `requester`, `owner`, `offeredItem`, `requestedItem`, `message`, `status`, `createdAt`, `updatedAt`.
-  - Status lifecycle: `Pending` → `Accepted` / `Rejected` / `Negotiating` / `Confirmed` → `Completed` / `Cancelled`.
-- **Swap Value Calculator Utility (`backend/utils/swapValueCalculator.js`):**
-  - Evaluates fair trade barter exchange balance.
-  - Considers garment condition weights (`New with tags`, `Like new`, `Gently used`, `Well worn`) and category baseline multipliers.
-  - Categorizes trade balance: `Balanced`, `Slight Difference`, or `Large Difference` with custom barter guidance advice.
-- **Location Matching Engine (`backend/routes/clothingRoutes.js`):**
-  - `GET /api/clothing/nearby/matches` queries other available garments within the same city or metropolitan region.
+---
 
-### 2. Swap Exchange APIs (`backend/routes/swapRoutes.js`)
-- `POST /api/swaps` — Proposes a new swap with strict validation:
-  - Prevents self-swapping (`requester !== owner`).
-  - Verifies ownership of offered garment.
-  - Verifies availability of both items.
-  - Prevents duplicate active swap requests.
-- `GET /api/swaps/incoming` — Fetches incoming requests received by the user.
-- `GET /api/swaps/outgoing` — Fetches outgoing inquiries initiated by the user.
-- `GET /api/swaps/counts` — Live dashboard metrics for incoming, outgoing, and completed trades.
-- `GET /api/swaps/:id` — Fetches complete swap details with populated parties and items.
-- `PUT /api/swaps/:id/accept` — Allows owner to accept a swap offer.
-- `PUT /api/swaps/:id/reject` — Allows owner to decline a swap offer.
-- `PUT /api/swaps/:id/cancel` — Allows requester to cancel an outgoing inquiry.
-- `PUT /api/swaps/:id/status` — Updates status (`Negotiating`, `Confirmed`, `Completed`). When marked `Completed`, automatically updates both garments' status to `Swapped`.
-- `POST /api/swaps/calculate-value` — API endpoint returning value calculation and barter balance analysis.
+## Day 4 Status: COMPLETED
 
-### 3. Frontend Pages & Interactions
-- **Swap Requests Hub (`frontend/swap-requests.html` & `frontend/js/swaps.js`):**
-  - Tab switcher between "Incoming Inquiries" and "Outgoing Inquiries" with live count badges.
-  - Side-by-side trade cards showing offered item ⇄ requested item, stated estimated values, and difference tag.
-  - Location compatibility note (Local Handover vs Courier/Shipping Trade).
-  - One-click actions: Accept, Reject, Cancel, and Mark Completed.
-- **Interactive Swap Proposal Flow (`frontend/item-details.html` & `frontend/js/item-details.js`):**
-  - Clicking "Request Swap" opens an interactive modal with target item preview.
-  - Dropdown of user's own available wardrobe garments.
-  - Real-time client value calculator display showing value comparison, difference, balance badge, and barter advice.
-  - Nearby city matches grid directly beneath item details.
-- **Updated Dashboard (`frontend/dashboard.html` & `frontend/js/dashboard.js`):**
-  - 5 live metric counters: My Wardrobe, Marketplace, Incoming Swaps, Outgoing Swaps, Completed Swaps.
-  - "Incoming Swap Proposals Awaiting Your Response" card on dashboard with direct review action.
+### 1. Negotiation Chat System
+- **Message Model (`backend/models/Message.js`):**
+  - Fields: `sender`, `receiver`, `swapRequest`, `message`, `timestamp`.
+  - Linked to users and active swap requests with full relational population.
+- **Chat RESTful APIs (`backend/routes/chatRoutes.js`):**
+  - `POST /api/chat/messages` — Verifies sender is an involved participant, routes message to receiver, and updates swap status to `Negotiating`.
+  - `GET /api/chat/:swapRequestId` — Fetches swap context banner and chronological messages for authorized parties.
+- **Chat Interface (`frontend/chat.html` & `frontend/js/chat.js`):**
+  - Context banner showing offered garment ⇄ requested garment, user locations, and live trade status.
+  - "🤝 Confirm Swap Agreement" action button.
+  - Live conversational feed with sender/receiver speech bubbles and 4-second auto-polling.
+
+### 2. Admin Oversight & Moderation Engine
+- **Admin Authorization Security (`backend/middleware/authMiddleware.js`):**
+  - Enforced `admin` role middleware rejecting unauthorized non-admin access with `HTTP 403 Forbidden`.
+- **Admin RESTful APIs (`backend/routes/adminRoutes.js`):**
+  - `GET /api/admin/analytics` — Platform metrics (Total Users, Listings, Swaps, Completed Trades, Category Distribution).
+  - `GET /api/admin/users` — Comprehensive user list with listings and swaps counts.
+  - `PUT /api/admin/users/:id/role` — Manage platform roles (`user` vs `admin`).
+  - `GET /api/admin/clothing` — Overview of all items across the platform.
+  - `DELETE /api/admin/clothing/:id` — Administrator moderation removal of inappropriate or policy-violating listings.
+  - `GET /api/admin/swaps` — Platform-wide swap activity monitor.
+
+### 3. Admin Control Center & Analytics UI
+- **Admin Dashboard (`frontend/admin.html` & `frontend/js/admin.js`):**
+  - KPI Metrics Cards: Total Users, Total Listings, Available Clothes, Total Inquiries, Completed Swaps, Success Rate %.
+  - Category distribution card.
+  - Manage Users table with direct role toggle actions.
+  - Garment Listings Moderation table with instant item removal.
+  - Swaps Monitoring table with link to inspect conversation.
 
 ### 4. Verification & Testing
 - Automated test script verified:
-  - Incoming and outgoing swaps fetch -> HTTP 200
-  - Swap Value Calculator API -> HTTP 200 (Balanced / Slight Difference / Large Difference)
-  - Location matching endpoint -> HTTP 200
-  - Self-swapping rejection -> HTTP 400 (Prevented)
-  - Duplicate active swap rejection -> HTTP 400 (Prevented)
-  - Complete swap lifecycle (Create -> Accept -> Complete -> Status marked 'Swapped') -> All passed
-  - Dashboard counts and static pages -> HTTP 200
+  - User and admin logins -> HTTP 200
+  - Chat fetch and message delivery -> HTTP 200 & HTTP 201
+  - Security check: Regular user accessing Admin routes -> Correctly blocked (HTTP 403 Forbidden)
+  - Admin analytics, users, clothing, and swaps fetch -> HTTP 200
+  - Admin moderation item removal -> HTTP 200 (Success)
+  - Static pages (`chat.html`, `admin.html`, `js/chat.js`, `js/admin.js`) -> HTTP 200
 
 ---
 
@@ -100,5 +97,5 @@ A 5-Day Sustainable Barter Economy Web Application Development Tracker.
 
 ## Next Planned Day
 
-**Day 4: Negotiation Chat + Admin Panel + Platform Analytics**
+**Day 5: Final Testing + UI Polish + Documentation + Deployment**
 *(Will begin only after receiving the explicit prompt `NEXT DAY`)*

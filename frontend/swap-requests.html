@@ -18,6 +18,7 @@
           <li><a href="dashboard.html">Dashboard</a></li>
           <li><a href="listings.html">Browse Clothes</a></li>
           <li><a href="swap-requests.html"><strong>Swap Requests</strong></a></li>
+          <li id="adminNavLink" style="display: none;"><a href="admin.html" style="color: var(--primary-color); font-weight: 700;">🛡️ Admin Panel</a></li>
           <li><button onclick="logout()" class="btn btn-outline btn-sm">Sign Out</button></li>
         </ul>
       </nav>
@@ -60,5 +61,12 @@
 
   <script src="js/config.js"></script>
   <script src="js/swaps.js"></script>
+  <script>
+    const user = getUser();
+    if (user && user.role === 'admin') {
+      const link = document.getElementById('adminNavLink');
+      if (link) link.style.display = 'block';
+    }
+  </script>
 </body>
 </html>
