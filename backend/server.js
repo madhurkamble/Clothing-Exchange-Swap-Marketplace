@@ -60,13 +60,28 @@ if (isLocalWithFrontend) {
   app.use(express.static(frontendDir));
 }
 
-// Health check endpoint (reports API health and database connection state)
-app.get('/api/health', (req, res) => {
+// Health check endpoint (actively verifies and reports API health and database connection state)
+app.get('/api/health', async (req, res) => {
+  let dbDiagnosticError = null;
+
+  try {
+    await connectDB();
+  } catch (err) {
+    // Strip any credentials from error message before returning in diagnostic response
+    dbDiagnosticError = (err.message || '').replace(/:\/\/([^:]+):([^@]+)@/g, '://$1:****@');
+  }
+
   const dbStates = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
-  res.json({
-    status: 'ok',
-    message: 'Clothing Exchange & Swap Marketplace API is healthy and running',
-    database: dbStates[mongoose.connection.readyState] || 'unknown',
+  const currentState = mongoose.connection.readyState;
+  const isDbConnected = currentState === 1;
+
+  res.status(isDbConnected ? 200 : 503).json({
+    status: isDbConnected ? 'ok' : 'degraded',
+    message: isDbConnected
+      ? 'Clothing Exchange & Swap Marketplace API is healthy and running'
+      : 'API is running but database is not connected',
+    database: dbStates[currentState] || 'unknown',
+    ...(dbDiagnosticError ? { error: dbDiagnosticError } : {}),
     timestamp: new Date().toISOString()
   });
 });
@@ -97,10 +112,12 @@ app.use('/api', async (req, res, next) => {
     await connectDB();
     next();
   } catch (error) {
-    console.error('Database connection error in request:', error.message);
+    console.error(`[API] DB connection error for ${req.method} ${req.originalUrl}:`, error.message);
+    const sanitizedError = (error.message || '').replace(/:\/\/([^:]+):([^@]+)@/g, '://$1:****@');
     res.status(503).json({
       success: false,
-      message: 'Database connection failed. Please ensure MONGODB_URI is configured properly in environment variables.'
+      message: 'Database connection failed. Please ensure MONGODB_URI is configured properly in environment variables.',
+      error: sanitizedError
     });
   }
 });
@@ -158,15 +175,16 @@ const seedIfNeeded = async () => {
 const PORT = process.env.PORT || 5000;
 let server;
 
+// Warm up connection attempt on cold start in both serverless and local environments
+connectDB().then(() => {
+  seedIfNeeded();
+}).catch((err) => {
+  console.warn('[MongoDB Diagnostic] Cold-start connection notice:', err.message);
+});
+
 // Start local server only when executed directly (node backend/server.js or npm start)
 // On Vercel, the file is required as a module, so app.listen is omitted
 if (require.main === module && !process.env.VERCEL) {
-  connectDB().then(() => {
-    seedIfNeeded();
-  }).catch((err) => {
-    console.error('Initial DB connection error:', err.message);
-  });
-
   server = app.listen(PORT, () => {
     console.log(`=================================================`);
     console.log(` Clothing Exchange Server running on port ${PORT}`);
