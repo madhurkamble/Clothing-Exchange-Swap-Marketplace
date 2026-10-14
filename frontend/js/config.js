@@ -1,8 +1,19 @@
 // Dynamic API Base URL Configuration
-// If running on backend server (e.g. port 5000), use origin; if opened directly or on live server, default to http://localhost:5000
-const API_BASE_URL = window.location.origin.includes(':5000') 
-  ? `${window.location.origin}/api` 
-  : 'http://localhost:5000/api';
+// - On Vercel (production): frontend & backend share same domain → use relative /api
+// - Locally on port 5000: use full origin
+// - Locally via file:// or Live Server: fallback to localhost:5000
+const API_BASE_URL = (() => {
+  const origin = window.location.origin;
+  if (origin.includes('localhost:5000') || origin.includes('127.0.0.1:5000')) {
+    return `${origin}/api`;
+  }
+  if (origin.startsWith('http') && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+    // Production (Vercel or any live domain) — same-origin API
+    return `${origin}/api`;
+  }
+  // Fallback: local dev without port 5000
+  return 'http://localhost:5000/api';
+})();
 
 // Token Management
 const getToken = () => localStorage.getItem('clothswap_token');
