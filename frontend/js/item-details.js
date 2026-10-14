@@ -1,13 +1,4 @@
 // Item Details Page Logic: Fetch details, Swap Proposal Flow, Value Calculator & Nearby City Matches
-const originalFetch = fetch;
-window.fetch = async (...args) => {
-  showSpinner();
-  try {
-    return await originalFetch(...args);
-  } finally {
-    hideSpinner();
-  }
-};
 
 let currentItem = null;
 let userAvailableItems = [];

@@ -1,22 +1,42 @@
+// Primary Deployed Backend Base URL (Vercel)
+const PROD_BACKEND_URL = 'https://clothing-exchange-backend.vercel.app';
+
 // Dynamic API Base URL Configuration
-// Pre-configured to point to the deployed Vercel backend
 const API_BASE_URL = (() => {
-  const origin = typeof window !== 'undefined' ? window.location.origin : '';
-
-  // Local development on unified port 5000
-  if (origin.includes(':5000')) {
-    return `${origin}/api`;
+  if (typeof window !== 'undefined') {
+    // 1. Explicit window or localStorage override
+    if (window.BACKEND_API_URL) {
+      return window.BACKEND_API_URL.replace(/\/$/, '') + '/api';
+    }
+    const custom = localStorage.getItem('clothswap_backend_url');
+    if (custom) {
+      return custom.replace(/\/$/, '') + '/api';
+    }
+    // 2. Only use local port 5000 if frontend is served by local backend on :5000
+    if (window.location.origin.includes(':5000')) {
+      return `${window.location.origin}/api`;
+    }
   }
 
-  // Local static dev servers (e.g. Live Server on :5500, file://)
-  if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.startsWith('file:')) {
-    return 'http://localhost:5000/api';
-  }
-
-  // Production backend URL (configurable via window.BACKEND_API_URL or localStorage)
-  const configuredBackend = (typeof window !== 'undefined' && (window.BACKEND_API_URL || localStorage.getItem('clothswap_backend_url'))) || 'https://clothing-exchange-backend.vercel.app';
-  return configuredBackend.replace(/\/$/, '') + '/api';
+  // 3. Default to the verified deployed Vercel backend API
+  return `${PROD_BACKEND_URL}/api`;
 })();
+
+// Helper to extract a friendly error message from any fetch response
+const parseApiError = async (response, fallbackMsg = 'Request failed') => {
+  try {
+    const text = await response.text();
+    try {
+      const json = JSON.parse(text);
+      return json.message || json.error || fallbackMsg;
+    } catch (_) {
+      return text && text.length < 150 ? text : `${fallbackMsg} (Status ${response.status})`;
+    }
+  } catch (_) {
+    return `${fallbackMsg} (Status ${response.status})`;
+  }
+};
+
 
 // Token Management
 const getToken = () => localStorage.getItem('clothswap_token');

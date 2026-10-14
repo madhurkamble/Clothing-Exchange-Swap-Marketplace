@@ -3,24 +3,13 @@
   "builds": [
     {
       "src": "backend/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["frontend/**"]
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "backend/server.js"
-    },
-    {
-      "src": "/(.*\\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp))",
-      "dest": "frontend/$1"
-    },
-    {
-      "src": "/",
-      "dest": "frontend/index.html"
     },
     {
       "src": "/(.*)",

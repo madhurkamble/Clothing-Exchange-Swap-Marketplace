@@ -33,9 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ email, password })
         });
 
-        const data = await response.json();
+        let data = null;
+        try {
+          data = await response.json();
+        } catch (_) {
+          data = null;
+        }
 
-        if (response.ok && data.success) {
+        if (response.ok && data && data.success) {
           showAlert('alertBox', 'Login successful! Redirecting...', 'success');
           setToken(data.token);
           setUser(data.user);
@@ -43,11 +48,18 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'dashboard.html';
           }, 800);
         } else {
-          showAlert('alertBox', data.message || 'Login failed. Please check your credentials.', 'error');
+          const errorMsg = (data && (data.message || data.error))
+            || (response.status === 401 ? 'Invalid email or password' : null)
+            || (response.status === 503 ? 'Database connection is initializing. Please try again in a few seconds.' : null)
+            || `Login failed (HTTP ${response.status}: ${response.statusText || 'Error'})`;
+          showAlert('alertBox', errorMsg, 'error');
         }
       } catch (error) {
         console.error('Login error:', error);
-        showAlert('alertBox', 'Unable to connect to server. Ensure backend is running.', 'error');
+        const netMsg = error.name === 'TypeError' || error.message.includes('fetch')
+          ? `Could not reach backend API at ${API_BASE_URL}. Please verify network connection or CORS settings.`
+          : `Login error: ${error.message}`;
+        showAlert('alertBox', netMsg, 'error');
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Sign In';
@@ -93,9 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ name, email, password, phone, location })
         });
 
-        const data = await response.json();
+        let data = null;
+        try {
+          data = await response.json();
+        } catch (_) {
+          data = null;
+        }
 
-        if (response.ok && data.success) {
+        if (response.ok && data && data.success) {
           showAlert('alertBox', 'Account created successfully! Redirecting...', 'success');
           setToken(data.token);
           setUser(data.user);
@@ -103,11 +120,18 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'dashboard.html';
           }, 1000);
         } else {
-          showAlert('alertBox', data.message || 'Registration failed. Try again.', 'error');
+          const errorMsg = (data && (data.message || data.error))
+            || (response.status === 400 ? 'Please check your registration details' : null)
+            || (response.status === 503 ? 'Database connection is initializing. Please try again shortly.' : null)
+            || `Registration failed (HTTP ${response.status}: ${response.statusText || 'Error'})`;
+          showAlert('alertBox', errorMsg, 'error');
         }
       } catch (error) {
         console.error('Registration error:', error);
-        showAlert('alertBox', 'Unable to connect to server. Ensure backend is running.', 'error');
+        const netMsg = error.name === 'TypeError' || error.message.includes('fetch')
+          ? `Could not reach backend API at ${API_BASE_URL}. Please verify network connection or CORS settings.`
+          : `Registration error: ${error.message}`;
+        showAlert('alertBox', netMsg, 'error');
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Create Account';
