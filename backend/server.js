@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
@@ -18,15 +19,48 @@ const adminRoutes = require('./routes/adminRoutes');
 // Initialize Express app
 const app = express();
 
-// Middleware
-app.use(cors());
+// Configure CORS for separate frontend deployment & local development
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+
+    const configuredFrontend = process.env.FRONTEND_URL;
+    if (configuredFrontend && (configuredFrontend === origin || configuredFrontend === '*')) {
+      return callback(null, true);
+    }
+
+    // Allow any Vercel domain or localhost/127.0.0.1
+    if (
+      origin.endsWith('.vercel.app') ||
+      origin.includes('localhost') ||
+      origin.includes('127.0.0.1') ||
+      !configuredFrontend
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, '../frontend')));
+// Check if frontend directory exists for local development
+const frontendDir = path.join(__dirname, '../frontend');
+const isLocalWithFrontend = !process.env.VERCEL && fs.existsSync(frontendDir);
 
-// Health check endpoint (reports service and database state)
+// Serve static frontend files ONLY in local development when the folder actually exists on disk
+if (isLocalWithFrontend) {
+  app.use(express.static(frontendDir));
+}
+
+// Health check endpoint (reports API health and database connection state)
 app.get('/api/health', (req, res) => {
   const dbStates = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
   res.json({
@@ -34,6 +68,26 @@ app.get('/api/health', (req, res) => {
     message: 'Clothing Exchange & Swap Marketplace API is healthy and running',
     database: dbStates[mongoose.connection.readyState] || 'unknown',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Root endpoint - returns API info & endpoint index (or serves local index.html if present)
+app.get('/', (req, res) => {
+  if (isLocalWithFrontend && fs.existsSync(path.join(frontendDir, 'index.html'))) {
+    return res.sendFile(path.join(frontendDir, 'index.html'));
+  }
+  res.json({
+    name: 'Clothing Exchange & Swap Marketplace API',
+    status: 'online',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      clothing: '/api/clothing',
+      swaps: '/api/swaps',
+      chat: '/api/chat',
+      admin: '/api/admin'
+    }
   });
 });
 
@@ -66,12 +120,17 @@ app.use('/api/chat', chatRoutes);
 // Admin Management & Analytics Routes
 app.use('/api/admin', adminRoutes);
 
-// Fallback route for index.html / SPA navigation
-app.get('*', (req, res) => {
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ success: false, message: 'API route not found' });
+// Fallback route for undefined paths
+app.use((req, res) => {
+  // If running locally with frontend present, allow client-side page routing
+  if (isLocalWithFrontend && req.method === 'GET' && !req.path.startsWith('/api') && fs.existsSync(path.join(frontendDir, 'index.html'))) {
+    return res.sendFile(path.join(frontendDir, 'index.html'));
   }
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+
+  res.status(404).json({
+    success: false,
+    message: `Cannot ${req.method} ${req.originalUrl}`
+  });
 });
 
 // Global Error Handler

@@ -1,18 +1,28 @@
 // Dynamic API Base URL Configuration
-// - On Vercel (production): frontend & backend share same domain → use relative /api
-// - Locally on port 5000: use full origin
-// - Locally via file:// or Live Server: fallback to localhost:5000
+// When frontend & backend are deployed as separate Vercel projects:
+// - Set window.BACKEND_API_URL, or
+// - Save in localStorage: localStorage.setItem('clothswap_backend_url', 'https://your-backend.vercel.app')
+const CUSTOM_BACKEND_URL = (typeof window !== 'undefined' && (window.BACKEND_API_URL || localStorage.getItem('clothswap_backend_url'))) || '';
+
 const API_BASE_URL = (() => {
+  if (CUSTOM_BACKEND_URL) {
+    return CUSTOM_BACKEND_URL.replace(/\/$/, '') + '/api';
+  }
+
   const origin = window.location.origin;
-  if (origin.includes('localhost:5000') || origin.includes('127.0.0.1:5000')) {
+
+  // Local development on unified port 5000
+  if (origin.includes(':5000')) {
     return `${origin}/api`;
   }
-  if (origin.startsWith('http') && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
-    // Production (Vercel or any live domain) — same-origin API
-    return `${origin}/api`;
+
+  // Local static servers (e.g. Live Server on :5500, file://, etc.)
+  if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.startsWith('file:')) {
+    return 'http://localhost:5000/api';
   }
-  // Fallback: local dev without port 5000
-  return 'http://localhost:5000/api';
+
+  // Production same-origin default
+  return `${origin}/api`;
 })();
 
 // Token Management
