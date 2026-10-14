@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Item Details | Clothing Exchange & Swap Marketplace</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/spinner.css">
 </head>
 <body>
+  <div class="spinner-container"><div class="spinner"></div></div>
   <header>
     <div class="container navbar">
       <a href="index.html" class="brand-logo">
@@ -222,7 +224,8 @@
     </div>
   </footer>
 
-  <script src="js/config.js"></script>
+  <script src="js/spinner.js"></script>
+<script src="js/config.js"></script>
   <script src="js/item-details.js"></script>
   <script>
     if (isAuthenticated()) {

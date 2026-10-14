@@ -69,10 +69,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`=================================================`);
   console.log(` Clothing Exchange Server running on port ${PORT}`);
   console.log(` Health Check: http://localhost:${PORT}/api/health`);
   console.log(` Web App:      http://localhost:${PORT}`);
   console.log(`=================================================`);
 });
+module.exports = { app, server };
