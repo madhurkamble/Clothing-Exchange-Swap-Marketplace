@@ -1,28 +1,21 @@
 // Dynamic API Base URL Configuration
-// When frontend & backend are deployed as separate Vercel projects:
-// - Set window.BACKEND_API_URL, or
-// - Save in localStorage: localStorage.setItem('clothswap_backend_url', 'https://your-backend.vercel.app')
-const CUSTOM_BACKEND_URL = (typeof window !== 'undefined' && (window.BACKEND_API_URL || localStorage.getItem('clothswap_backend_url'))) || '';
-
+// Pre-configured to point to the deployed Vercel backend
 const API_BASE_URL = (() => {
-  if (CUSTOM_BACKEND_URL) {
-    return CUSTOM_BACKEND_URL.replace(/\/$/, '') + '/api';
-  }
-
-  const origin = window.location.origin;
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
 
   // Local development on unified port 5000
   if (origin.includes(':5000')) {
     return `${origin}/api`;
   }
 
-  // Local static servers (e.g. Live Server on :5500, file://, etc.)
+  // Local static dev servers (e.g. Live Server on :5500, file://)
   if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.startsWith('file:')) {
     return 'http://localhost:5000/api';
   }
 
-  // Production same-origin default
-  return `${origin}/api`;
+  // Production backend URL (configurable via window.BACKEND_API_URL or localStorage)
+  const configuredBackend = (typeof window !== 'undefined' && (window.BACKEND_API_URL || localStorage.getItem('clothswap_backend_url'))) || 'https://clothing-exchange-backend.vercel.app';
+  return configuredBackend.replace(/\/$/, '') + '/api';
 })();
 
 // Token Management
