@@ -4,6 +4,10 @@
     {
       "src": "backend/server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -12,8 +16,44 @@
       "dest": "backend/server.js"
     },
     {
+      "src": "^/login$",
+      "dest": "/frontend/login.html"
+    },
+    {
+      "src": "^/register$",
+      "dest": "/frontend/register.html"
+    },
+    {
+      "src": "^/dashboard$",
+      "dest": "/frontend/dashboard.html"
+    },
+    {
+      "src": "^/listings$",
+      "dest": "/frontend/listings.html"
+    },
+    {
+      "src": "^/item-details$",
+      "dest": "/frontend/item-details.html"
+    },
+    {
+      "src": "^/swap-requests$",
+      "dest": "/frontend/swap-requests.html"
+    },
+    {
+      "src": "^/chat$",
+      "dest": "/frontend/chat.html"
+    },
+    {
+      "src": "^/admin$",
+      "dest": "/frontend/admin.html"
+    },
+    {
+      "src": "^/$",
+      "dest": "/frontend/index.html"
+    },
+    {
       "src": "/(.*)",
-      "dest": "backend/server.js"
+      "dest": "/frontend/$1"
     }
   ]
 }

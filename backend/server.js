@@ -20,11 +20,13 @@ const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 
 // Exact deployed frontend URL and local origins
-const exactFrontendOrigin = 'https://clothing-exchange-swap-marketplace-frontend.vercel.app';
+const exactFrontendOrigin = 'https://clothing-exchange-swap-marketplace-sandy.vercel.app';
+const legacyFrontendOrigin = 'https://clothing-exchange-swap-marketplace-frontend.vercel.app';
 const configuredFrontend = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null;
 
 const allowedOrigins = [
   exactFrontendOrigin,
+  legacyFrontendOrigin,
   configuredFrontend,
   'http://localhost:3000',
   'http://localhost:5000',
@@ -216,6 +218,12 @@ app.use((req, res) => {
   // If running locally with frontend present, allow client-side page routing
   if (isLocalWithFrontend && req.method === 'GET' && !req.path.startsWith('/api') && fs.existsSync(path.join(frontendDir, 'index.html'))) {
     return res.sendFile(path.join(frontendDir, 'index.html'));
+  }
+
+  // If in production/serverless and a user visits a web page URL on the backend, redirect to the frontend application
+  if (req.method === 'GET' && !req.path.startsWith('/api')) {
+    const targetUrl = `${exactFrontendOrigin}${req.originalUrl}`;
+    return res.redirect(302, targetUrl);
   }
 
   res.status(404).json({
